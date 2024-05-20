@@ -1,4 +1,4 @@
-const guessedletters = document.querySelector(".guessed-letters");
+const letterGuessed = document.querySelector(".guessed-letters");
 //console.log(guessedletters.outerHTML);
 const guessButton = document.querySelector(".guess");
 //console.log(guessbutton.outerHTML);
@@ -17,14 +17,22 @@ const btn = document.querySelector(".play-again");
 const word = "magnolia";
 const guessedLetters = [];
 
-const lettertyped = function (word) {
-  const lettertyped = [];
+const placeholder = function (word) {
+  const placeholderLetters = [];
   for (const letter of word) {
     console.log(letter);
-    lettertyped.push("●");
+    placeholderLetters.push("●");
   }
-  wordInProgress.innerText = placeholderLetters.join("");
+  wordInProgess.innerText = placeholderLetters.join("");
 };
+// const lettertyped = function (word) {
+//   const lettertyped = [];
+//   for (const letter of word) {
+//     console.log(letter);
+//     lettertyped.push("●");
+//   }
+
+placeholder(word);
 
 guessButton.addEventListener("click", function (e) {
   e.preventDefault();
@@ -60,5 +68,35 @@ const makeGuess = function (guess) {
   } else {
     guessedLetters.push(guess);
     console.log(guessedLetters);
+    showLetterGuessed();
+    updateWordInProgress(guessedLetters);
+  }
+};
+const showLetterGuessed = function () {
+  letterGuessed.innerHTML = "";
+  for (const letter of guessedLetters) {
+    const li = document.createElement("li");
+    li.innerText = letter;
+    letterGuessed.append(li);
+  }
+};
+const updateWordInProgress = function (guessedLetters) {
+  const wordUpper = word.toUpperCase();
+  const wordArray = wordUpper.split("");
+  const revealWord = [];
+  for (const letter of wordArray) {
+    if (guessedLetters.includes(letter)) {
+      revealWord.push(letter.toUpperCase());
+    } else {
+      revealWord.push("●");
+    }
+  }
+  wordInProgess.innerText = revealWord.join("");
+  checkIfWin();
+};
+const checkIfWin = function () {
+  if (word.toUpperCase() === wordInProgress.innerText) {
+    message.classList.add("win");
+    message.innerHTML = `<p class="highlight">You guessed the correct word! Congrats!</p>`;
   }
 };
